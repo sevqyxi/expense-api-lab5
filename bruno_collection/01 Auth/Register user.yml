@@ -1,0 +1,35 @@
+info:
+  name: Register user
+  type: http
+  seq: 1
+http:
+  method: POST
+  url: '{{userBaseUrl}}/register'
+  body:
+    type: json
+    data: |-
+      {
+        "username": "user_{{runId}}",
+        "password": "Secret12345",
+        "name": "Ivan Petrenko"
+      }
+  auth: inherit
+runtime:
+  scripts:
+  - type: before-request
+    code: |-
+      bru.setVar("runId", Date.now());
+  - type: after-response
+    code: |-
+      bru.setVar("userId", res.body.id);
+  - type: tests
+    code: |-
+      test("role user, password is not returned", function () {
+        expect(res.body.role).to.equal("user");
+        expect(res.body).to.not.have.property("password");
+        expect(res.body).to.not.have.property("password_hash");
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

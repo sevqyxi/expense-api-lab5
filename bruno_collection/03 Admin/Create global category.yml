@@ -1,0 +1,25 @@
+info:
+  name: Create global category
+  type: http
+  seq: 1
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/category/global'
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Food"
+      }
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("globalCategoryId", res.body.id);
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

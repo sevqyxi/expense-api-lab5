@@ -1,0 +1,28 @@
+info:
+  name: Request without token - 401
+  type: http
+  seq: 5
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/rpc'
+  body:
+    type: json
+    data: |-
+      {
+        "jsonrpc": "2.0",
+        "method": "create_record",
+        "params": {"category_id": {{globalCategoryId}}, "amount": 10},
+        "id": 5
+      }
+  auth: inherit
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("unauthorized JSON-RPC error", function () {
+        expect(res.body.error.code).to.equal(-32001);
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '401'

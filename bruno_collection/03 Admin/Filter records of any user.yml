@@ -1,0 +1,19 @@
+info:
+  name: Filter records of any user
+  type: http
+  seq: 5
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/record?user_id={{otherUserId}}'
+  params:
+  - name: user_id
+    value: '{{otherUserId}}'
+    type: query
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

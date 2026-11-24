@@ -1,0 +1,15 @@
+info:
+  name: Delete user - 403
+  type: http
+  seq: 12
+http:
+  method: DELETE
+  url: '{{userBaseUrl}}/user/{{otherUserId}}'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '403'

@@ -1,0 +1,14 @@
+fastapi==0.165.0
+uvicorn==0.54.0
+SQLAlchemy==2.1.9
+alembic==1.20.1
+psycopg[binary]==3.3.9
+pydantic==2.14.4
+python-dotenv>=1.0
+PyJWT>=2.8
+cryptography>=46
+grpcio==1.80.0
+grpcio-tools==1.80.0
+pytest>=8.0
+pytest-freezer>=0.4.8
+httpx2

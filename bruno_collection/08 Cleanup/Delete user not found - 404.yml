@@ -1,0 +1,15 @@
+info:
+  name: Delete user not found - 404
+  type: http
+  seq: 8
+http:
+  method: DELETE
+  url: '{{userBaseUrl}}/user/{{userId}}'
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '404'

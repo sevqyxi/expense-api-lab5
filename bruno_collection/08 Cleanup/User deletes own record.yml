@@ -1,0 +1,15 @@
+info:
+  name: User deletes own record
+  type: http
+  seq: 1
+http:
+  method: DELETE
+  url: '{{expenseBaseUrl}}/record/{{recordId}}'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '204'

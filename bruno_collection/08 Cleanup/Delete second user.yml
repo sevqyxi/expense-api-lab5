@@ -1,0 +1,15 @@
+info:
+  name: Delete second user
+  type: http
+  seq: 6
+http:
+  method: DELETE
+  url: '{{userBaseUrl}}/user/{{otherUserId}}'
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '204'

@@ -1,0 +1,23 @@
+info:
+  name: Create record for user
+  type: http
+  seq: 4
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "user_id": {{userId}},
+        "category_id": {{globalCategoryId}},
+        "amount": 1200
+      }
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

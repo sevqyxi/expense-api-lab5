@@ -1,0 +1,26 @@
+info:
+  name: Create record with own category
+  type: http
+  seq: 7
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": {{personalCategoryId}},
+        "amount": 250.50
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("recordId", res.body.id);
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

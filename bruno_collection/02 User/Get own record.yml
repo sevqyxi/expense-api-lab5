@@ -1,0 +1,15 @@
+info:
+  name: Get own record
+  type: http
+  seq: 9
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/record/{{recordId}}'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

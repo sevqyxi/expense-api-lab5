@@ -1,0 +1,24 @@
+info:
+  name: Login second user
+  type: http
+  seq: 8
+http:
+  method: POST
+  url: '{{userBaseUrl}}/login'
+  body:
+    type: json
+    data: |-
+      {
+        "username": "user2_{{runId}}",
+        "password": "Secret12345"
+      }
+  auth: inherit
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("otherToken", res.body.access_token);
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

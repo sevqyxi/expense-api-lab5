@@ -1,0 +1,21 @@
+info:
+  name: Register with admin role - 400
+  type: http
+  seq: 4
+http:
+  method: POST
+  url: '{{userBaseUrl}}/register'
+  body:
+    type: json
+    data: |-
+      {
+        "username": "hacker_{{runId}}",
+        "password": "Secret12345",
+        "role": "admin"
+      }
+  auth: inherit
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '400'

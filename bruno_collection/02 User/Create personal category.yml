@@ -1,0 +1,25 @@
+info:
+  name: Create personal category
+  type: http
+  seq: 4
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/category'
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Hobbies"
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("personalCategoryId", res.body.id);
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

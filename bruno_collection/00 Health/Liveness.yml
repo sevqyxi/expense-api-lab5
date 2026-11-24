@@ -1,0 +1,20 @@
+info:
+  name: Liveness
+  type: http
+  seq: 1
+http:
+  method: GET
+  url: '{{userBaseUrl}}/healthz/live'
+  auth: inherit
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("status alive with ISO-8601 timestamp", function () {
+        expect(res.body.status).to.equal("alive");
+        expect(new Date(res.body.timestamp).toString()).to.not.equal("Invalid Date");
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

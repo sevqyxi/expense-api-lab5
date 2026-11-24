@@ -1,0 +1,36 @@
+opencollection: 1.0.0
+
+info:
+  name: Expense API (Lab 5)
+config:
+  protobuf:
+    protoFiles:
+      - type: file
+        path: ../proto/auth.proto
+  proxy:
+    inherit: true
+    config:
+      protocol: http
+      hostname: ""
+      port: ""
+      auth:
+        username: ""
+        password: ""
+      bypassProxy: ""
+
+request:
+  variables:
+    - name: userBaseUrl
+      value: http://127.0.0.1:8000
+    - name: expenseBaseUrl
+      value: http://127.0.0.1:8001
+    - name: adminUsername
+      value: admin
+    - name: adminPassword
+      value: Admin12345
+bundled: false
+extensions:
+  bruno:
+    ignore:
+      - node_modules
+      - .git

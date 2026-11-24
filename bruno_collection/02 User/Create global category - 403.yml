@@ -1,0 +1,21 @@
+info:
+  name: Create global category - 403
+  type: http
+  seq: 6
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/category/global'
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Global"
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '403'

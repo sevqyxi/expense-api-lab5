@@ -1,0 +1,15 @@
+info:
+  name: Request with invalid token - 401
+  type: http
+  seq: 14
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/category'
+  auth:
+    type: bearer
+    token: invalid.jwt.token
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '401'

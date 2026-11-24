@@ -1,0 +1,21 @@
+info:
+  name: Create record with invalid JSON - 400
+  type: http
+  seq: 11
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": {{globalCategoryId}},
+        "amount": }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '400'

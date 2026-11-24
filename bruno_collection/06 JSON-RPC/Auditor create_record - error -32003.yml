@@ -1,0 +1,30 @@
+info:
+  name: Auditor create_record - error -32003
+  type: http
+  seq: 6
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/rpc'
+  body:
+    type: json
+    data: |-
+      {
+        "jsonrpc": "2.0",
+        "method": "create_record",
+        "params": {"category_id": {{globalCategoryId}}, "amount": 10},
+        "id": 6
+      }
+  auth:
+    type: bearer
+    token: '{{auditorToken}}'
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("forbidden for auditor", function () {
+        expect(res.body.error.code).to.equal(-32003);
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

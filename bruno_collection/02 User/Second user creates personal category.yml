@@ -1,0 +1,25 @@
+info:
+  name: Second user creates personal category
+  type: http
+  seq: 5
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/category'
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Travel"
+      }
+  auth:
+    type: bearer
+    token: '{{otherToken}}'
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("otherCategoryId", res.body.id);
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

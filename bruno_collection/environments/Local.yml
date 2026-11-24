@@ -1,0 +1,10 @@
+name: Local
+variables:
+- name: userBaseUrl
+  value: http://127.0.0.1:8000
+- name: expenseBaseUrl
+  value: http://127.0.0.1:8001
+- name: adminUsername
+  value: admin
+- name: adminPassword
+  value: Admin12345

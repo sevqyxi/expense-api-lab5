@@ -1,0 +1,74 @@
+services:
+  user-db:
+    image: postgres:16
+    container_name: user-db-lab5
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: users
+    ports:
+      # порт на комп'ютері береться з USER_DB_PORT у .env
+      - "${USER_DB_PORT:-5433}:5432"
+    volumes:
+      - user-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  expense-db:
+    image: postgres:16
+    container_name: expense-db-lab5
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: expenses
+    ports:
+      - "${EXPENSE_DB_PORT:-5434}:5432"
+    volumes:
+      - expense-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  user-service:
+    build:
+      context: .
+      dockerfile: user_service/Dockerfile
+    restart: unless-stopped
+    environment:
+      USER_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@user-db:5432/users
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY:?Задайте JWT_SECRET_KEY у файлі .env}
+      JWT_EXPIRE_MINUTES: ${JWT_EXPIRE_MINUTES:-60}
+      USER_SERVICE_GRPC_PORT: "50051"
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    depends_on:
+      user-db:
+        condition: service_healthy
+
+  expense-service:
+    build:
+      context: .
+      dockerfile: expense_service/Dockerfile
+    restart: unless-stopped
+    environment:
+      EXPENSE_DATABASE_URL: postgresql+psycopg://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@expense-db:5432/expenses
+      USER_SERVICE_GRPC_ADDR: user-service:50051
+    ports:
+      - "8001:8000"
+    depends_on:
+      expense-db:
+        condition: service_healthy
+      user-service:
+        condition: service_started
+
+volumes:
+  user-pgdata:
+  expense-pgdata:

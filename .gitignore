@@ -1,0 +1,12 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.DS_Store
+.vscode/
+.idea/
+.env
+# згенеровані gRPC stubs (створюються командою protoc, у репозиторій не потрапляють)
+proto/*_pb2.py
+proto/*_pb2_grpc.py

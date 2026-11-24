@@ -1,0 +1,23 @@
+info:
+  name: Create record for unknown user - 404 (gRPC UserExists)
+  type: http
+  seq: 2
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "user_id": 999999,
+        "category_id": {{globalCategoryId}},
+        "amount": 10
+      }
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '404'

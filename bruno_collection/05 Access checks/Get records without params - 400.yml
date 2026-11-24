@@ -1,0 +1,15 @@
+info:
+  name: Get records without params - 400
+  type: http
+  seq: 9
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/record'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '400'

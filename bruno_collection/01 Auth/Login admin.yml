@@ -1,0 +1,30 @@
+info:
+  name: Login admin
+  type: http
+  seq: 9
+http:
+  method: POST
+  url: '{{userBaseUrl}}/login'
+  body:
+    type: json
+    data: |-
+      {
+        "username": "{{adminUsername}}",
+        "password": "{{adminPassword}}"
+      }
+  auth: inherit
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("adminToken", res.body.access_token);
+  - type: tests
+    code: |-
+      test("access token received", function () {
+        expect(res.body.access_token).to.be.a("string");
+        expect(res.body.token_type).to.equal("bearer");
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

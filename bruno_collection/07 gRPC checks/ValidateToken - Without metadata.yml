@@ -1,0 +1,21 @@
+info:
+  name: ValidateToken - Without metadata
+  type: grpc
+  seq: 5
+
+grpc:
+  url: localhost:50051
+  method: /auth.AuthService/ValidateToken
+  methodType: unary
+  protoFilePath: ../proto/auth.proto
+  metadata:
+    - name: authorization
+      value: Bearer {{userToken}}
+      disabled: true
+  message:
+    - title: message 1
+      message: |-
+        {
+          "token": "{{userToken}}"
+        }
+  auth: inherit

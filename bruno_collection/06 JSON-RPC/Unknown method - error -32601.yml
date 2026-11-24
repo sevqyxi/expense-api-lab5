@@ -1,0 +1,31 @@
+info:
+  name: Unknown method - error -32601
+  type: http
+  seq: 4
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/rpc'
+  body:
+    type: json
+    data: |-
+      {
+        "jsonrpc": "2.0",
+        "method": "delete_everything",
+        "params": {},
+        "id": 4
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("method not found", function () {
+        expect(res.body.error.code).to.equal(-32601);
+        expect(res.body.id).to.equal(4);
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

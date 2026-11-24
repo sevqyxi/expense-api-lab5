@@ -1,0 +1,23 @@
+info:
+  name: Get available categories
+  type: http
+  seq: 11
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/category'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("own category visible, other user's category hidden", function () {
+        const ids = res.body.map(function (c) { return c.id; });
+        expect(ids).to.include(Number(bru.getVar("personalCategoryId")));
+        expect(ids).to.not.include(Number(bru.getVar("otherCategoryId")));
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

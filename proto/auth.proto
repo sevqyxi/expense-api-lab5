@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+  rpc ValidateToken (ValidateTokenRequest) returns (ValidateTokenResponse);
+  // додано для ЛР5: перевірка, що користувач існує (потрібно для записів на інших користувачів)
+  rpc UserExists (UserExistsRequest) returns (UserExistsResponse);
+}
+
+message ValidateTokenRequest {
+  string token = 1;
+}
+
+message ValidateTokenResponse {
+  bool is_valid = 1;
+  string user_id = 2;
+  repeated string roles = 3;
+}
+
+message UserExistsRequest {
+  int32 user_id = 1;
+}
+
+message UserExistsResponse {
+  bool exists = 1;
+}

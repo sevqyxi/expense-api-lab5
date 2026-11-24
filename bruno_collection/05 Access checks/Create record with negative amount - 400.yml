@@ -1,0 +1,22 @@
+info:
+  name: Create record with negative amount - 400
+  type: http
+  seq: 10
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": {{globalCategoryId}},
+        "amount": -50
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '400'

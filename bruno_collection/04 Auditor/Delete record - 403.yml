@@ -1,0 +1,15 @@
+info:
+  name: Delete record - 403
+  type: http
+  seq: 7
+http:
+  method: DELETE
+  url: '{{expenseBaseUrl}}/record/{{otherRecordId}}'
+  auth:
+    type: bearer
+    token: '{{auditorToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '403'

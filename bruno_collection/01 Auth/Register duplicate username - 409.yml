@@ -1,0 +1,20 @@
+info:
+  name: Register duplicate username - 409
+  type: http
+  seq: 5
+http:
+  method: POST
+  url: '{{userBaseUrl}}/register'
+  body:
+    type: json
+    data: |-
+      {
+        "username": "user_{{runId}}",
+        "password": "Secret12345"
+      }
+  auth: inherit
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '409'

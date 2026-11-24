@@ -1,0 +1,30 @@
+info:
+  name: Invalid params - error -32602
+  type: http
+  seq: 8
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/rpc'
+  body:
+    type: json
+    data: |-
+      {
+        "jsonrpc": "2.0",
+        "method": "create_record",
+        "params": {"category_id": {{globalCategoryId}}, "amount": -5},
+        "id": 8
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("negative amount is invalid params", function () {
+        expect(res.body.error.code).to.equal(-32602);
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

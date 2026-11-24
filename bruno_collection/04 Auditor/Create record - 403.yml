@@ -1,0 +1,22 @@
+info:
+  name: Create record - 403
+  type: http
+  seq: 6
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": {{globalCategoryId}},
+        "amount": 10
+      }
+  auth:
+    type: bearer
+    token: '{{auditorToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '403'

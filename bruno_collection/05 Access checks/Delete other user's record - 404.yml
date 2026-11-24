@@ -1,0 +1,15 @@
+info:
+  name: Delete other user's record - 404
+  type: http
+  seq: 5
+http:
+  method: DELETE
+  url: '{{expenseBaseUrl}}/record/{{otherRecordId}}'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '404'

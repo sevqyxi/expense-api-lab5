@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    # кожен сервіс має власну БД: окремі контейнери PostgreSQL
+    services:
+      user-db:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: users_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+      expense-db:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: expenses_test
+        ports:
+          - 5433:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    # тестові значення лише для CI, справжні секрети в репозиторій не потрапляють
+    env:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      USER_DB_PORT: "5432"
+      EXPENSE_DB_PORT: "5433"
+      TEST_USER_DB: users_test
+      TEST_EXPENSE_DB: expenses_test
+      JWT_SECRET_KEY: test-ci-secret-key-not-for-production-0123
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate gRPC stubs
+        run: python -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. proto/auth.proto
+
+      - name: Run User Service tests
+        working-directory: user_service
+        run: pytest --maxfail=1 --disable-warnings -v
+
+      - name: Run Expense Service tests
+        working-directory: expense_service
+        run: pytest --maxfail=1 --disable-warnings -v

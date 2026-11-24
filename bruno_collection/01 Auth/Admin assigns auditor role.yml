@@ -1,0 +1,21 @@
+info:
+  name: Admin assigns auditor role
+  type: http
+  seq: 10
+http:
+  method: PATCH
+  url: '{{userBaseUrl}}/user/{{auditorId}}/role'
+  body:
+    type: json
+    data: |-
+      {
+        "role": "auditor"
+      }
+  auth:
+    type: bearer
+    token: '{{adminToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

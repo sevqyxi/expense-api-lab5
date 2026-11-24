@@ -1,0 +1,15 @@
+info:
+  name: Token checked via gRPC - 200
+  type: http
+  seq: 1
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/category'
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

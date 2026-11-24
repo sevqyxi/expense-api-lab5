@@ -1,0 +1,21 @@
+info:
+  name: Create category - 403
+  type: http
+  seq: 8
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/category'
+  body:
+    type: json
+    data: |-
+      {
+        "name": "Audit"
+      }
+  auth:
+    type: bearer
+    token: '{{auditorToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '403'

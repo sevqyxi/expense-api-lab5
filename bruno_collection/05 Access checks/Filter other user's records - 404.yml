@@ -1,0 +1,19 @@
+info:
+  name: Filter other user's records - 404
+  type: http
+  seq: 7
+http:
+  method: GET
+  url: '{{expenseBaseUrl}}/record?user_id={{otherUserId}}'
+  params:
+  - name: user_id
+    value: '{{otherUserId}}'
+    type: query
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '404'

@@ -1,0 +1,23 @@
+info:
+  name: Create record with spoofed user_id - 404
+  type: http
+  seq: 6
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "user_id": {{otherUserId}},
+        "category_id": {{globalCategoryId}},
+        "amount": 10
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '404'

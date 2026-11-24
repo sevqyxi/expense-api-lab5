@@ -1,0 +1,26 @@
+info:
+  name: Second user creates record
+  type: http
+  seq: 8
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/record'
+  body:
+    type: json
+    data: |-
+      {
+        "category_id": {{otherCategoryId}},
+        "amount": 99.99
+      }
+  auth:
+    type: bearer
+    token: '{{otherToken}}'
+runtime:
+  scripts:
+  - type: after-response
+    code: |-
+      bru.setVar("otherRecordId", res.body.id);
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '201'

@@ -1,0 +1,30 @@
+info:
+  name: Spoofed user_id - error -32004
+  type: http
+  seq: 7
+http:
+  method: POST
+  url: '{{expenseBaseUrl}}/rpc'
+  body:
+    type: json
+    data: |-
+      {
+        "jsonrpc": "2.0",
+        "method": "create_record",
+        "params": {"user_id": {{otherUserId}}, "category_id": {{globalCategoryId}}, "amount": 10},
+        "id": 7
+      }
+  auth:
+    type: bearer
+    token: '{{userToken}}'
+runtime:
+  scripts:
+  - type: tests
+    code: |-
+      test("other user's id is not visible", function () {
+        expect(res.body.error.code).to.equal(-32004);
+      });
+  assertions:
+  - expression: res.status
+    operator: eq
+    value: '200'

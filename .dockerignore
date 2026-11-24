@@ -1,0 +1,7 @@
+.git
+.venv
+.env
+.github
+bruno_collection
+**/__pycache__
+**/.pytest_cache
